@@ -2,9 +2,9 @@ using Android.Runtime;
 using Android.Support.V7.Widget;
 using System;
 
-namespace Com.Afollestad.Materialdialogs.Simplelist
+namespace AFollestad.MaterialDialogs.SimpleList
 {
-    public partial class MaterialSimpleListAdapter : global::Android.Support.V7.Widget.RecyclerView.Adapter, global::Com.Afollestad.Materialdialogs.Internal.IMDAdapter
+    public partial class MaterialSimpleListAdapter : global::Android.Support.V7.Widget.RecyclerView.Adapter, global::AFollestad.MaterialDialogs.Internal.IMDAdapter
     {
         static IntPtr id_onBindViewHolder_Lcom_afollestad_materialdialogs_simplelist_MaterialSimpleListAdapter_SimpleListVH_I;
         // Metadata.xml XPath method reference: path="/api/package[@name='com.afollestad.materialdialogs.simplelist']/class[@name='MaterialSimpleListAdapter']/method[@name='onBindViewHolder' and count(parameter)=2 and parameter[1][@type='com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter.SimpleListVH'] and parameter[2][@type='int']]"
@@ -42,11 +42,11 @@ namespace Com.Afollestad.Materialdialogs.Simplelist
                 __args[0] = new JValue(p0);
                 __args[1] = new JValue(p1);
 
-                global::Com.Afollestad.Materialdialogs.Simplelist.MaterialSimpleListAdapter.SimpleListVH __ret;
+                global::AFollestad.MaterialDialogs.SimpleList.MaterialSimpleListAdapter.SimpleListVH __ret;
                 if (GetType() == ThresholdType)
-                    __ret = global::Java.Lang.Object.GetObject<global::Com.Afollestad.Materialdialogs.Simplelist.MaterialSimpleListAdapter.SimpleListVH>(JNIEnv.CallObjectMethod(((global::Java.Lang.Object)this).Handle, id_onCreateViewHolder_Landroid_view_ViewGroup_I, __args), JniHandleOwnership.TransferLocalRef);
+                    __ret = global::Java.Lang.Object.GetObject<global::AFollestad.MaterialDialogs.SimpleList.MaterialSimpleListAdapter.SimpleListVH>(JNIEnv.CallObjectMethod(((global::Java.Lang.Object)this).Handle, id_onCreateViewHolder_Landroid_view_ViewGroup_I, __args), JniHandleOwnership.TransferLocalRef);
                 else
-                    __ret = global::Java.Lang.Object.GetObject<global::Com.Afollestad.Materialdialogs.Simplelist.MaterialSimpleListAdapter.SimpleListVH>(JNIEnv.CallNonvirtualObjectMethod(((global::Java.Lang.Object)this).Handle, ThresholdClass, JNIEnv.GetMethodID(ThresholdClass, "onCreateViewHolder", "(Landroid/view/ViewGroup;I)Lcom/afollestad/materialdialogs/simplelist/MaterialSimpleListAdapter$SimpleListVH;"), __args), JniHandleOwnership.TransferLocalRef);
+                    __ret = global::Java.Lang.Object.GetObject<global::AFollestad.MaterialDialogs.SimpleList.MaterialSimpleListAdapter.SimpleListVH>(JNIEnv.CallNonvirtualObjectMethod(((global::Java.Lang.Object)this).Handle, ThresholdClass, JNIEnv.GetMethodID(ThresholdClass, "onCreateViewHolder", "(Landroid/view/ViewGroup;I)Lcom/afollestad/materialdialogs/simplelist/MaterialSimpleListAdapter$SimpleListVH;"), __args), JniHandleOwnership.TransferLocalRef);
                 return __ret as RecyclerView.ViewHolder;
             }
             finally

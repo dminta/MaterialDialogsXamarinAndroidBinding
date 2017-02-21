@@ -6,9 +6,16 @@
   This sample removes the method: android.support.v4.content.CursorLoader.loadInBackground:
   <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='CursorLoader']/method[@name='loadInBackground']" />
   -->
-  <attr path="/api/package[@name='com.afollestad.materialdialogs']/class[@name='DialogBase']" name="visibility">public</attr>
-  <remove-node path="/api/package[@name='com.afollestad.materialdialogs']/class[@name='MaterialDialog.ButtonCallback']/method[@name='finalize' and count(parameter)=0]" />
+  <attr path="/api/package[@name='com.afollestad.materialdialogs']"
+    name="managedName">AFollestad.MaterialDialogs</attr>
+  <attr path="/api/package[@name='com.afollestad.materialdialogs.internal']"
+    name="managedName">AFollestad.MaterialDialogs.Internal</attr>
+  <attr path="/api/package[@name='com.afollestad.materialdialogs.util']"
+    name="managedName">AFollestad.MaterialDialogs.Util</attr>
+
   <remove-node path="/api/package[@name='com.afollestad.materialdialogs']/class[@name='MaterialDialog.Builder']/method[@name='items' and count(parameter)=1 and parameter[1][@type='java.lang.CharSequence...']]" />
   <remove-node path="/api/package[@name='com.afollestad.materialdialogs']/class[@name='MaterialDialog']/method[@name='setItems' and count(parameter)=1 and parameter[1][@type='java.lang.CharSequence...']]" />
+  <attr path="/api/package[@name='com.afollestad.materialdialogs']/class[@name='DialogBase']" name="visibility">public</attr>
+  <remove-node path="/api/package[@name='com.afollestad.materialdialogs']/class[@name='MaterialDialog.ButtonCallback']/method[@name='finalize' and count(parameter)=0]" />
   <remove-node path="/api/package[@name='com.afollestad.materialdialogs']/class[@name='MaterialDialog']/method[@name='getItems' and count(parameter)=0]" />
 </metadata>

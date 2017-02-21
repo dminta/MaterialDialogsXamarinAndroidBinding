@@ -6,6 +6,19 @@
   This sample removes the method: android.support.v4.content.CursorLoader.loadInBackground:
   <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='CursorLoader']/method[@name='loadInBackground']" />
   -->
-  <remove-node path="/api/package[@name='com.afollestad.materialdialogs.simplelist']/class[@name='MaterialSimpleListAdapter']/method[@name='onBindViewHolder' and count(parameter)=2 and parameter[1][@type='com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter.SimpleListVH'] and parameter[2][@type='int']]" />
+
+  <attr path="/api/package[@name='com.afollestad.materialdialogs.color']"
+    name="managedName">AFollestad.MaterialDialogs.Color</attr>
+  <attr path="/api/package[@name='com.afollestad.materialdialogs.commons']"
+    name="managedName">AFollestad.MaterialDialogs.Commons</attr>
+  <attr path="/api/package[@name='com.afollestad.materialdialogs.prefs']"
+    name="managedName">AFollestad.MaterialDialogs.Prefs</attr>
+  <attr path="/api/package[@name='com.afollestad.materialdialogs.simplelist']"
+    name="managedName">AFollestad.MaterialDialogs.SimpleList</attr>
+  <attr path="/api/package[@name='com.afollestad.materialdialogs.folderselector']"
+    name="managedName">AFollestad.MaterialDialogs.FolderSelector</attr>
+  
+<!--  <remove-node path="/api/package[@name='com.afollestad.materialdialogs.simplelist']/class[@name='MaterialSimpleListAdapter']/method[@name='onBindViewHolder' and count(parameter)=2 and parameter[1][@type='com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter.SimpleListVH'] and parameter[2][@type='int']]" />
   <remove-node path="/api/package[@name='com.afollestad.materialdialogs.simplelist']/class[@name='MaterialSimpleListAdapter']/method[@name='onCreateViewHolder' and count(parameter)=2 and parameter[1][@type='android.view.ViewGroup'] and parameter[2][@type='int']]" />
+  -->
 </metadata>
