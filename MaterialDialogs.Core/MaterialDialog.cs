@@ -5,6 +5,29 @@ namespace AFollestad.MaterialDialogs
 {
     public partial class MaterialDialog
     {
+        public partial class Builder
+        {
+            class OnAnySingleButtonCallback : Java.Lang.Object, ISingleButtonCallback
+            {
+                Action<MaterialDialog, DialogAction> _onAnyAction;
+
+                public OnAnySingleButtonCallback(Action<MaterialDialog, DialogAction> onAnyAction)
+                {
+                    _onAnyAction = onAnyAction;
+                }
+
+                public void OnClick(MaterialDialog dialog, DialogAction which)
+                {
+                    _onAnyAction?.Invoke(dialog, which);
+                }
+            }
+
+            public Builder OnAny(Action<MaterialDialog, DialogAction> onAnyAction)
+            {
+                return OnAny(new OnAnySingleButtonCallback(onAnyAction));
+            }
+        }
+
         static IntPtr id_items_arrayLjava_lang_CharSequence_;
         // Metadata.xml XPath method reference: path="/api/package[@name='com.afollestad.materialdialogs']/class[@name='MaterialDialog.Builder']/method[@name='items' and count(parameter)=1 and parameter[1][@type='java.lang.CharSequence...']]"
         [Register("items", "([Ljava/lang/CharSequence;)Lcom/afollestad/materialdialogs/MaterialDialog$Builder;", "GetItems_arrayLjava_lang_CharSequence_Handler")]
