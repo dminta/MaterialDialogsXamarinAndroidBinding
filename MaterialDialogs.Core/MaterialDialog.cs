@@ -1,5 +1,7 @@
 using Android.Runtime;
 using System;
+using Android.Views;
+using Java.Lang;
 
 namespace AFollestad.MaterialDialogs
 {
@@ -7,24 +9,69 @@ namespace AFollestad.MaterialDialogs
     {
         public partial class Builder
         {
-            class OnAnySingleButtonCallback : Java.Lang.Object, ISingleButtonCallback
+            class ListCallbackActionWrapper : Java.Lang.Object, IListCallback
             {
-                Action<MaterialDialog, DialogAction> _onAnyAction;
+                Action<MaterialDialog, View, int, string> _action;
 
-                public OnAnySingleButtonCallback(Action<MaterialDialog, DialogAction> onAnyAction)
+                public ListCallbackActionWrapper(Action<MaterialDialog, View, int, string> action)
                 {
-                    _onAnyAction = onAnyAction;
+                    _action = action;
+                }
+
+                public void OnSelection(MaterialDialog dialog, View view, int which, ICharSequence text)
+                {
+                    _action?.Invoke(dialog, view, which, text?.ToString());
+                }
+            }
+
+            class ListLongCallbackFuncWrapper : Java.Lang.Object, IListLongCallback
+            {
+                Func<MaterialDialog, View, int, string, bool> _func;
+
+                public ListLongCallbackFuncWrapper(Func<MaterialDialog, View, int, string, bool> func)
+                {
+                    _func = func;
+                }
+
+                public bool OnLongSelection(MaterialDialog dialog, View view, int which, ICharSequence text)
+                {
+                    return _func?.Invoke(dialog, view, which, text?.ToString()) ?? false;
+                }
+            }
+
+            class SingleButtonCallbackActionWrapper : Java.Lang.Object, ISingleButtonCallback
+            {
+                Action<MaterialDialog, DialogAction> _action;
+
+                public SingleButtonCallbackActionWrapper(Action<MaterialDialog, DialogAction> action)
+                {
+                    _action = action;
                 }
 
                 public void OnClick(MaterialDialog dialog, DialogAction which)
                 {
-                    _onAnyAction?.Invoke(dialog, which);
+                    _action?.Invoke(dialog, which);
                 }
             }
 
-            public Builder OnAny(Action<MaterialDialog, DialogAction> onAnyAction)
+            public Builder OnAny(Action<MaterialDialog, DialogAction> action)
             {
-                return OnAny(new OnAnySingleButtonCallback(onAnyAction));
+                return OnAny(new SingleButtonCallbackActionWrapper(action));
+            }
+
+            public Builder OnNeutral(Action<MaterialDialog, DialogAction> action)
+            {
+                return OnNeutral(new SingleButtonCallbackActionWrapper(action));
+            }
+
+            public Builder ItemsCallback(Action<MaterialDialog, View, int, string> action)
+            {
+                return ItemsCallback(new ListCallbackActionWrapper(action));
+            }
+
+            public Builder ItemsLongCallback(Func<MaterialDialog, View, int, string, bool> func)
+            {
+                return ItemsLongCallback(new ListLongCallbackFuncWrapper(func));
             }
         }
 

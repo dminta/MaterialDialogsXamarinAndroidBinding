@@ -182,6 +182,89 @@ namespace MaterialDialogs.Sample
         }
 
         #endregion
+
+        #region Basic Lists
+
+        [OnClick(Resource.Id.list)]
+        public void ShowList(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.socialNetworks)
+                .Items(Resource.Array.socialNetworks)
+                .ItemsCallback((dialog, view, which, text) => ShowToast($"{which}: {text}"))
+                .Show();
+        }
+
+        [OnClick(Resource.Id.listNoTitle)]
+        public void ShowListNoTitle(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Items(Resource.Array.socialNetworks)
+                .ItemsCallback((dialog, view, which, text) => ShowToast($"{which}: {text}"))
+                .Show();
+        }
+
+        [OnClick(Resource.Id.longList)]
+        public void ShowLongList(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.states)
+                .Items(Resource.Array.states)
+                .ItemsCallback((dialog, view, which, text) => ShowToast($"{which}: {text}"))
+                .PositiveText(Android.Resource.String.Cancel)
+                .Show();
+        }
+
+        [OnClick(Resource.Id.list_longItems)]
+        public void ShowListLongItems(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.socialNetworks)
+                .Items(Resource.Array.socialNetworks_longItems)
+                .ItemsCallback((dialog, view, which, text) => ShowToast($"{which}: {text}"))
+                .Show();
+        }
+        
+        [OnClick(Resource.Id.list_checkPrompt)]
+        public void ShowListCheckPrompt(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.socialNetworks)
+                .Items(Resource.Array.socialNetworks)
+                .ItemsCallback((dialog, view, which, text) => ShowToast($"{which}: {text}"))
+                .CheckBoxPromptRes(Resource.String.example_prompt, true, null)
+                .NegativeText(Android.Resource.String.Cancel)
+                .Show();
+        }
+
+        static int index = 0;
+        
+        [OnClick(Resource.Id.list_longPress)]
+        public void ShowListLongPress(object sender, EventArgs e)
+        {
+            index = 0;
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.socialNetworks)
+                .Items(Resource.Array.socialNetworks)
+                .ItemsCallback((dialog, view, which, text) => ShowToast($"{which}: {text}"))
+                .AutoDismiss(false)
+                .ItemsLongCallback((dialog, itemView, position, text) => 
+                {
+                    dialog.GetItems().RemoveAt(position);
+                    dialog.NotifyItemsChanged();
+                    return false;
+                })
+                .OnNeutral((dialog, which) =>
+                {
+                    index++;
+                    dialog.GetItems().Add(new Java.Lang.String($"Item {index}"));
+                    dialog.NotifyItemInserted(dialog.GetItems().Count - 1);
+                })
+                .NeutralText(Resource.String.add_item)
+                .Show();
+        }
+
+        #endregion
     }
 }
 
