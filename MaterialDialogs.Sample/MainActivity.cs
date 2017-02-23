@@ -134,8 +134,50 @@ namespace MaterialDialogs.Sample
                 .Title(Html.FromHtml(GetString(Resource.String.permissionSample, GetString(Resource.String.app_name))))
                 .PositiveText(Resource.String.allow)
                 .NegativeText(Resource.String.deny)
-                .OnAny((dialog, which) => ShowToast($"Prompt checked? {dialog.PromptCheckBoxChecked}"))
+                .OnAny((dialog, which) => ShowToast($"Prompt checked? {dialog.PromptCheckBoxChecked.ToString().ToLower()}"))
                 .CheckBoxPromptRes(Resource.String.dont_ask_again, false, null)
+                .Show();
+        }
+
+        #endregion
+
+        #region Action buttons
+
+        [OnClick(Resource.Id.stacked)]
+        public void ShowStacked(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.useGoogleLocationServices)
+                .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
+                .PositiveText(Resource.String.speedBoost)
+                .NegativeText(Resource.String.noThanks)
+                .BtnStackedGravity(GravityEnum.End)
+                .StackingBehavior(StackingBehavior.Always)
+                .Show();
+        }
+
+        [OnClick(Resource.Id.neutral)]
+        public void ShowNeutral(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.useGoogleLocationServices)
+                .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
+                .PositiveText(Resource.String.agree)
+                .NegativeText(Resource.String.disagree)
+                .NeutralText(Resource.String.more_info)
+                .Show();
+        }
+
+        [OnClick(Resource.Id.callbacks)]
+        public void ShowCallbacks(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.useGoogleLocationServices)
+                .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
+                .PositiveText(Resource.String.agree)
+                .NegativeText(Resource.String.disagree)
+                .NeutralText(Resource.String.more_info)
+                .OnAny((dialog, which) => ShowToast($"{which.Name()}!"))
                 .Show();
         }
 
