@@ -10,6 +10,7 @@ using Android.Views;
 using Android.Widget;
 using CheeseBind;
 using System;
+using System.Text;
 using System.Threading;
 
 namespace MaterialDialogs.Sample
@@ -261,6 +262,159 @@ namespace MaterialDialogs.Sample
                     dialog.NotifyItemInserted(dialog.GetItems().Count - 1);
                 })
                 .NeutralText(Resource.String.add_item)
+                .Show();
+        }
+
+        #endregion
+
+        #region Choice Lists
+
+        [OnClick(Resource.Id.singleChoice)]
+        public void ShowSingleChoice(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.socialNetworks)
+                .Items(Resource.Array.socialNetworks)
+                .ItemsCallbackSingleChoice(2, (dialog, view, which, text) =>
+                {
+                    ShowToast($"{which}: {text}");
+                    return true;
+                })
+                .PositiveText(Resource.String.md_choose_label)
+                .Show();
+        }
+
+        [OnClick(Resource.Id.singleChoice_longItems)]
+        public void ShowSingleChoiceLongItems(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.socialNetworks)
+                .Items(Resource.Array.socialNetworks_longItems)
+                .ItemsCallbackSingleChoice(2, (dialog, view, which, text) =>
+                {
+                    ShowToast($"{which}: {text}");
+                    return true;
+                })
+                .PositiveText(Resource.String.md_choose_label)
+                .Show();
+        }
+
+        [OnClick(Resource.Id.multiChoice)]
+        public void ShowMultiChoice(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.socialNetworks)
+                .Items(Resource.Array.socialNetworks)
+                .ItemsCallbackMultiChoice(new int[] { 1, 3 }, (dialog, which, text) =>
+                {
+                    StringBuilder str = new StringBuilder();
+                    for (int i = 0; i < which.Length; i++)
+                    {
+                        if (i > 0) str.Append('\n');
+                        str.Append(which[i]);
+                        str.Append(": ");
+                        str.Append(text[i]);
+                    }
+                    ShowToast(str.ToString());
+                    return true;
+                })
+                .OnNeutral((dialog, which) => dialog.ClearSelectedIndices())
+                .OnPositive((dialog, which) => dialog.Dismiss())
+                .AlwaysCallMultiChoiceCallback()
+                .PositiveText(Resource.String.md_choose_label)
+                .AutoDismiss(false)
+                .NeutralText(Resource.String.clear_selection)
+                .Show();
+        }
+
+        [OnClick(Resource.Id.multiChoiceLimited)]
+        public void ShowMultiChoiceLimited(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.socialNetworks)
+                .Items(Resource.Array.socialNetworks)
+                .ItemsCallbackMultiChoice(new int[] { 1 }, (dialog, which, text) =>
+                {
+                    bool allowSelectionChange = which.Length <= 2;
+                    if (!allowSelectionChange)
+                    {
+                        ShowToast(Resource.String.selection_limit_reached);
+                    }
+                    return allowSelectionChange;
+                })
+                .PositiveText(Resource.String.dismiss)
+                .AlwaysCallMultiChoiceCallback()
+                .Show();
+        }
+
+        [OnClick(Resource.Id.multiChoiceLimitedMin)]
+        public void ShowMultiChoiceLimitedMin(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.socialNetworks)
+                .Items(Resource.Array.socialNetworks)
+                .ItemsCallbackMultiChoice(new int[] { 1 }, (dialog, which, text) =>
+                {
+                    bool allowSelectionChange = which.Length >= 1;
+                    if (!allowSelectionChange)
+                    {
+                        ShowToast(Resource.String.selection_min_limit_reached);
+                    }
+                    return allowSelectionChange;
+                })
+                .PositiveText(Resource.String.dismiss)
+                .AlwaysCallMultiChoiceCallback()
+                .Show();
+        }
+
+        [OnClick(Resource.Id.multiChoice_longItems)]
+        public void ShowMultiChoiceLongItems(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.socialNetworks)
+                .Items(Resource.Array.socialNetworks_longItems)
+                .ItemsCallbackMultiChoice(new int[] { 1, 3 }, (dialog, which, text) =>
+                {
+                    StringBuilder str = new StringBuilder();
+                    for (int i = 0; i < which.Length; i++)
+                    {
+                        if (i > 0) str.Append('\n');
+                        str.Append(which[i]);
+                        str.Append(": ");
+                        str.Append(text[i]);
+                    }
+                    ShowToast(str.ToString());
+                    return true;
+                })
+                .PositiveText(Resource.String.md_choose_label)
+                .Show();
+        }
+
+        [OnClick(Resource.Id.multiChoice_disabledItems)]
+        public void ShowMultiChoiceDisabledItems(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                .Title(Resource.String.socialNetworks)
+                .Items(Resource.Array.socialNetworks)
+                .ItemsCallbackMultiChoice(new int[] { 0, 1, 2 }, (dialog, which, text) =>
+                {
+                    StringBuilder str = new StringBuilder();
+                    for (int i = 0; i < which.Length; i++)
+                    {
+                        if (i > 0) str.Append('\n');
+                        str.Append(which[i]);
+                        str.Append(": ");
+                        str.Append(text[i]);
+                    }
+                    ShowToast(str.ToString());
+                    return true;
+                })
+                .OnNeutral((dialog, which) => dialog.ClearSelectedIndices())
+                .AlwaysCallMultiChoiceCallback()
+                .PositiveText(Resource.String.md_choose_label)
+                .AutoDismiss(false)
+                .NeutralText(Resource.String.clear_selection)
+                .ItemsDisabledIndices(0, 1)
                 .Show();
         }
 

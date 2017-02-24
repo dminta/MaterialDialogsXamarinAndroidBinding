@@ -2,6 +2,7 @@ using Android.Runtime;
 using System;
 using Android.Views;
 using Java.Lang;
+using System.Linq;
 
 namespace AFollestad.MaterialDialogs
 {
@@ -21,6 +22,38 @@ namespace AFollestad.MaterialDialogs
                 public void OnSelection(MaterialDialog dialog, View view, int which, ICharSequence text)
                 {
                     _action?.Invoke(dialog, view, which, text?.ToString());
+                }
+            }
+
+            class ListCallbackSingleChoiceFuncWrapper : Java.Lang.Object, IListCallbackSingleChoice
+            {
+                Func<MaterialDialog, View, int, string, bool> _func;
+
+                public ListCallbackSingleChoiceFuncWrapper(Func<MaterialDialog, View, int, string, bool> func)
+                {
+                    _func = func;
+                }
+
+                public bool OnSelection(MaterialDialog dialog, View view, int which, ICharSequence text)
+                {
+                    return _func?.Invoke(dialog, view, which, text?.ToString()) ?? false;
+                }
+            }
+
+            class ListCallbackMultiChoiceFuncWrapper : Java.Lang.Object, IListCallbackMultiChoice
+            {
+                Func<MaterialDialog, int[], string[], bool> _func;
+
+                public ListCallbackMultiChoiceFuncWrapper(Func<MaterialDialog, int[], string[], bool> func)
+                {
+                    _func = func;
+                }
+
+                public bool OnSelection(MaterialDialog dialog, Integer[] which, ICharSequence[] text)
+                {
+                    var whichArray = which.Select(w => w.IntValue()).ToArray();
+                    var textArray = text.Select(t => t.ToString()).ToArray();
+                    return _func?.Invoke(dialog, whichArray, textArray) ?? false;
                 }
             }
 
@@ -64,6 +97,11 @@ namespace AFollestad.MaterialDialogs
                 return OnNeutral(new SingleButtonCallbackActionWrapper(action));
             }
 
+            public Builder OnPositive(Action<MaterialDialog, DialogAction> action)
+            {
+                return OnPositive(new SingleButtonCallbackActionWrapper(action));
+            }
+
             public Builder ItemsCallback(Action<MaterialDialog, View, int, string> action)
             {
                 return ItemsCallback(new ListCallbackActionWrapper(action));
@@ -72,6 +110,22 @@ namespace AFollestad.MaterialDialogs
             public Builder ItemsLongCallback(Func<MaterialDialog, View, int, string, bool> func)
             {
                 return ItemsLongCallback(new ListLongCallbackFuncWrapper(func));
+            }
+
+            public Builder ItemsCallbackSingleChoice(int selectedIndex, Func<MaterialDialog, View, int, string, bool> func)
+            {
+                return ItemsCallbackSingleChoice(selectedIndex, new ListCallbackSingleChoiceFuncWrapper(func));
+            }
+
+            public Builder ItemsCallbackMultiChoice(int[] selectedIndices, Func<MaterialDialog, int[], string[], bool> func)
+            {
+                var indices = selectedIndices.Select(index => new Integer(index)).ToArray();
+                return ItemsCallbackMultiChoice(indices, new ListCallbackMultiChoiceFuncWrapper(func));
+            }
+
+            public Builder ItemsDisabledIndices(params int[] indices)
+            {
+                return ItemsDisabledIndices(indices.Select(i => new Integer(i)).ToArray());
             }
         }
 
