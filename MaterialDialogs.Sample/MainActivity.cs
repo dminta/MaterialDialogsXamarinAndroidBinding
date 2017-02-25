@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Java.IO;
+using System.Threading.Tasks;
 
 namespace MaterialDialogs.Sample
 {
@@ -40,7 +41,8 @@ namespace MaterialDialogs.Sample
 
         int _accentPreselect;
         Toast _toast;
-        Thread _thread;
+        Task _task;
+        CancellationTokenSource _cancellationTokenSrc;
         Handler _handler;
 
         int _chooserDialog;
@@ -54,9 +56,9 @@ namespace MaterialDialogs.Sample
 
         void StartThread(Action action)
         {
-            _thread?.Interrupt();
-            _thread = new Thread(new ThreadStart(action));
-            _thread.Start();
+            _cancellationTokenSrc?.Cancel();
+            _cancellationTokenSrc = new CancellationTokenSource();
+            _task = Task.Factory.StartNew(action, _cancellationTokenSrc.Token);
         }
 
         void ShowToast(int message)
@@ -84,10 +86,7 @@ namespace MaterialDialogs.Sample
         protected override void OnPause()
         {
             base.OnPause();
-            if (_thread != null && _thread.IsAlive)
-            {
-                _thread.Interrupt();
-            }
+            _cancellationTokenSrc?.Cancel();
         }
 
         #region Basic
@@ -657,7 +656,7 @@ namespace MaterialDialogs.Sample
         {
             new MaterialDialog.Builder(this)
                     .Title(Resource.String.useGoogleLocationServices)
-                    .Content(Resource.String.useGoogleLocationServicesPrompt)
+                    .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
                     .PositiveText(Resource.String.agree)
                     .NegativeText(Resource.String.disagree)
                     .PositiveColorRes(Resource.Color.material_red_400)
@@ -679,7 +678,7 @@ namespace MaterialDialogs.Sample
         {
             new MaterialDialog.Builder(this)
                     .Title(Resource.String.useGoogleLocationServices)
-                    .Content(Resource.String.useGoogleLocationServicesPrompt)
+                    .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
                     .PositiveText(Resource.String.agree)
                     .NegativeText(Resource.String.disagree)
                     .NeutralText(Resource.String.more_info)
@@ -808,6 +807,68 @@ namespace MaterialDialogs.Sample
                     .Input(Resource.String.input_hint, Resource.String.input_hint, false, (dialog, input) =>
                             ShowToast("Hello, " + input + "!"))
                     .CheckBoxPromptRes(Resource.String.example_prompt, true, null)
+                    .Show();
+        }
+
+        #endregion
+
+        #region Progress
+
+        [OnClick(Resource.Id.progress1)]
+        public void ShowProgressDeterminateDialog(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                    .Title(Resource.String.progress_dialog)
+                    .Content(Resource.String.please_wait)
+                    .ContentGravity(GravityEnum.Center)
+                    .Progress(false, 150, true)
+                    .CancelListener(dialog => 
+                    {
+                        _cancellationTokenSrc?.Cancel();
+                    })
+                    .ShowListener(dialogInterface => 
+                    {
+                        MaterialDialog dialog = (MaterialDialog)dialogInterface;
+                        StartThread(async () => 
+                        {
+                            while (dialog.CurrentProgress != dialog.MaxProgress)
+                            {
+                                if (dialog.IsCancelled || (_cancellationTokenSrc?.IsCancellationRequested ?? false))
+                                {
+                                    break;
+                                }
+
+                                await Task.Delay(50);
+
+                                dialog.IncrementProgress(1);
+                            }
+                            RunOnUiThread(() => 
+                            {
+                                dialog.SetContent(GetString(Resource.String.md_done_label));
+                            });
+                        });
+                    }).Show();
+        }
+
+        [OnClick(Resource.Id.progress2)]
+        public void ShowProgressIndeterminateDialog(object sender, EventArgs e)
+        {
+            ShowIndeterminateProgressDialog(false);
+        }
+
+        [OnClick(Resource.Id.progress3)]
+        public void ShowProgressHorizontalIndeterminateDialog(object sender, EventArgs e)
+        {
+            ShowIndeterminateProgressDialog(true);
+        }
+
+        void ShowIndeterminateProgressDialog(bool horizontal)
+        {
+            new MaterialDialog.Builder(this)
+                    .Title(Resource.String.progress_dialog)
+                    .Content(Resource.String.please_wait)
+                    .Progress(true, 0)
+                    .ProgressIndeterminateStyle(horizontal)
                     .Show();
         }
 
