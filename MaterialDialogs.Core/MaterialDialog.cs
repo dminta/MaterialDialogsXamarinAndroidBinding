@@ -3,6 +3,7 @@ using System;
 using Android.Views;
 using Java.Lang;
 using System.Linq;
+using Android.Content;
 
 namespace AFollestad.MaterialDialogs
 {
@@ -10,6 +11,51 @@ namespace AFollestad.MaterialDialogs
     {
         public partial class Builder
         {
+            class DialogInterfaceOnCancelListenerActionWrapper : Java.Lang.Object, IDialogInterfaceOnCancelListener
+            {
+                Action<IDialogInterface> _action;
+
+                public DialogInterfaceOnCancelListenerActionWrapper(Action<IDialogInterface> action)
+                {
+                    _action = action;
+                }
+
+                public void OnCancel(IDialogInterface dialog)
+                {
+                    _action?.Invoke(dialog);
+                }
+            }
+
+            class DialogInterfaceOnDismissListenerActionWrapper : Java.Lang.Object, IDialogInterfaceOnDismissListener
+            {
+                Action<IDialogInterface> _action;
+
+                public DialogInterfaceOnDismissListenerActionWrapper(Action<IDialogInterface> action)
+                {
+                    _action = action;
+                }
+
+                public void OnDismiss(IDialogInterface dialog)
+                {
+                    _action?.Invoke(dialog);
+                }
+            }
+
+            class DialogInterfaceOnShowListenerActionWrapper : Java.Lang.Object, IDialogInterfaceOnShowListener
+            {
+                Action<IDialogInterface> _action;
+
+                public DialogInterfaceOnShowListenerActionWrapper(Action<IDialogInterface> action)
+                {
+                    _action = action;
+                }
+
+                public void OnShow(IDialogInterface dialog)
+                {
+                    _action?.Invoke(dialog);
+                }
+            }
+
             class ListCallbackActionWrapper : Java.Lang.Object, IListCallback
             {
                 Action<MaterialDialog, View, int, string> _action;
@@ -126,6 +172,21 @@ namespace AFollestad.MaterialDialogs
             public Builder ItemsDisabledIndices(params int[] indices)
             {
                 return ItemsDisabledIndices(indices.Select(i => new Integer(i)).ToArray());
+            }
+
+            public Builder ShowListener(Action<IDialogInterface> action)
+            {
+                return ShowListener(new DialogInterfaceOnShowListenerActionWrapper(action));
+            }
+
+            public Builder CancelListener(Action<IDialogInterface> action)
+            {
+                return CancelListener(new DialogInterfaceOnCancelListenerActionWrapper(action));
+            }
+
+            public Builder DismissListener(Action<IDialogInterface> action)
+            {
+                return DismissListener(new DialogInterfaceOnDismissListenerActionWrapper(action));
             }
         }
 

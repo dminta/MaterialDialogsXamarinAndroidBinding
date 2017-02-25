@@ -4,10 +4,13 @@ using AFollestad.MaterialDialogs.FolderSelector;
 using AFollestad.MaterialDialogs.Internal;
 using AFollestad.MaterialDialogs.SimpleList;
 using AFollestad.MaterialDialogs.Util;
+using Android;
+using Android.Annotation;
 using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
+using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Android.Support.V7.App;
 using Android.Text;
@@ -19,40 +22,41 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Java.IO;
 
 namespace MaterialDialogs.Sample
 {
     [Activity(Label = "@string/app_name", MainLauncher = true)]
     public class MainActivity : AppCompatActivity,
-        //FolderChooserDialog.IFolderCallback,
-        //FileChooserDialog.IFileCallback,
+        FolderChooserDialog.IFolderCallback,
+        FileChooserDialog.IFileCallback,
         ColorChooserDialog.IColorCallback
     {
         const int StoragePermissionRC = 69;
 
-        EditText passwordInput;
-        View positiveAction;
-        int primaryPreselect;
+        EditText _passwordInput;
+        View _positiveAction;
+        int _primaryPreselect;
 
-        int accentPreselect;
-        Toast toast;
-        Thread thread;
-        Handler handler;
+        int _accentPreselect;
+        Toast _toast;
+        Thread _thread;
+        Handler _handler;
 
-        int chooserDialog;
+        int _chooserDialog;
 
         void ShowToast(string message)
         {
-            toast?.Cancel();
-            toast = Toast.MakeText(this, message, ToastLength.Short);
-            toast.Show();
+            _toast?.Cancel();
+            _toast = Toast.MakeText(this, message, ToastLength.Short);
+            _toast.Show();
         }
 
         void StartThread(Action action)
         {
-            thread?.Interrupt();
-            thread = new Thread(new ThreadStart(action));
-            thread.Start();
+            _thread?.Interrupt();
+            _thread = new Thread(new ThreadStart(action));
+            _thread.Start();
         }
 
         void ShowToast(int message)
@@ -66,23 +70,23 @@ namespace MaterialDialogs.Sample
             SetContentView (Resource.Layout.activity_main);
             Cheeseknife.Bind(this);
 
-            handler = new Handler();
-            primaryPreselect = DialogUtils.ResolveColor(this, Resource.Attribute.colorPrimary);
-            accentPreselect = DialogUtils.ResolveColor(this, Resource.Attribute.colorAccent);
+            _handler = new Handler();
+            _primaryPreselect = DialogUtils.ResolveColor(this, Resource.Attribute.colorPrimary);
+            _accentPreselect = DialogUtils.ResolveColor(this, Resource.Attribute.colorAccent);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            handler = null;
+            _handler = null;
         }
 
         protected override void OnPause()
         {
             base.OnPause();
-            if (thread != null && thread.IsAlive)
+            if (_thread != null && _thread.IsAlive)
             {
-                thread.Interrupt();
+                _thread.Interrupt();
             }
         }
 
@@ -480,33 +484,33 @@ namespace MaterialDialogs.Sample
                     .CustomView(Resource.Layout.dialog_customview, true)
                     .PositiveText(Resource.String.connect)
                     .NegativeText(Android.Resource.String.Cancel)
-                    .OnPositive((dialog1, which) => ShowToast("Password: " + passwordInput.Text)).Build();
+                    .OnPositive((dialog1, which) => ShowToast("Password: " + _passwordInput.Text)).Build();
 
-            positiveAction = dialog.GetActionButton(DialogAction.Positive);
+            _positiveAction = dialog.GetActionButton(DialogAction.Positive);
 
-            passwordInput = dialog.CustomView.FindViewById<EditText>(Resource.Id.password);
-            passwordInput.TextChanged += (s, ev) =>
+            _passwordInput = dialog.CustomView.FindViewById<EditText>(Resource.Id.password);
+            _passwordInput.TextChanged += (s, ev) =>
             {
-                positiveAction.Enabled = String.Concat(ev.Text.Select(c => c.ToString())).Trim().Length > 0;
+                _positiveAction.Enabled = String.Concat(ev.Text.Select(c => c.ToString())).Trim().Length > 0;
             };
 
 
             CheckBox checkbox = dialog.CustomView.FindViewById<CheckBox>(Resource.Id.showPassword);
             checkbox.CheckedChange += (s, ev) =>
             {
-                passwordInput.InputType = (!ev.IsChecked) ? InputTypes.TextVariationPassword : InputTypes.ClassText;
-                passwordInput.TransformationMethod = (!ev.IsChecked) ? PasswordTransformationMethod.Instance : null;
+                _passwordInput.InputType = (!ev.IsChecked) ? InputTypes.TextVariationPassword : InputTypes.ClassText;
+                _passwordInput.TransformationMethod = (!ev.IsChecked) ? PasswordTransformationMethod.Instance : null;
             };
 
             int widgetColor = ThemeSingleton.Get().WidgetColor;
             MDTintHelper.SetTint(checkbox, 
                 widgetColor == 0 ? ContextCompat.GetColor(this, Resource.Color.accent) : widgetColor);
 
-            MDTintHelper.SetTint(passwordInput,
+            MDTintHelper.SetTint(_passwordInput,
                 widgetColor == 0 ? ContextCompat.GetColor(this, Resource.Color.accent) : widgetColor);
 
             dialog.Show();
-            positiveAction.Enabled = false;
+            _positiveAction.Enabled = false;
         }
 
         [OnClick(Resource.Id.customView_webView)]
@@ -539,7 +543,7 @@ namespace MaterialDialogs.Sample
         {
             new ColorChooserDialog.Builder(this, Resource.String.color_palette)
                     .TitleSub(Resource.String.colors)
-                    .Preselect(primaryPreselect)
+                    .Preselect(_primaryPreselect)
                     .Show();
         }
 
@@ -549,7 +553,7 @@ namespace MaterialDialogs.Sample
             new ColorChooserDialog.Builder(this, Resource.String.color_palette)
                     .TitleSub(Resource.String.colors)
                     .AccentMode(true)
-                    .Preselect(accentPreselect)
+                    .Preselect(_accentPreselect)
                     .Show();
         }
 
@@ -598,7 +602,7 @@ namespace MaterialDialogs.Sample
 
             new ColorChooserDialog.Builder(this, Resource.String.color_palette)
                     .TitleSub(Resource.String.colors)
-                    .Preselect(primaryPreselect)
+                    .Preselect(_primaryPreselect)
                     .CustomColors(Resource.Array.custom_colors, subColors)
                     .Show();
         }
@@ -608,7 +612,7 @@ namespace MaterialDialogs.Sample
         {
             new ColorChooserDialog.Builder(this, Resource.String.color_palette)
                     .TitleSub(Resource.String.colors)
-                    .Preselect(primaryPreselect)
+                    .Preselect(_primaryPreselect)
                     .CustomColors(Resource.Array.custom_colors, null)
                     .Show();
         }
@@ -619,7 +623,7 @@ namespace MaterialDialogs.Sample
         {
             if (dialog.IsAccentMode)
             {
-                accentPreselect = color;
+                _accentPreselect = color;
                 ThemeSingleton.Get().PositiveColor = DialogUtils.GetActionTextStateList(this, color);
                 ThemeSingleton.Get().NeutralColor = DialogUtils.GetActionTextStateList(this, color);
                 ThemeSingleton.Get().NegativeColor = DialogUtils.GetActionTextStateList(this, color);
@@ -627,7 +631,7 @@ namespace MaterialDialogs.Sample
             }
             else
             {
-                primaryPreselect = color;
+                _primaryPreselect = color;
                 SupportActionBar?.SetBackgroundDrawable(new ColorDrawable(new Color(color)));
                 if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
                 {
@@ -645,6 +649,106 @@ namespace MaterialDialogs.Sample
         #endregion
 
         #endregion
+
+        #region Miscellaneous
+
+        [OnClick(Resource.Id.themed)]
+        public void ShowThemed(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                    .Title(Resource.String.useGoogleLocationServices)
+                    .Content(Resource.String.useGoogleLocationServicesPrompt)
+                    .PositiveText(Resource.String.agree)
+                    .NegativeText(Resource.String.disagree)
+                    .PositiveColorRes(Resource.Color.material_red_400)
+                    .NegativeColorRes(Resource.Color.material_red_400)
+                    .TitleGravity(GravityEnum.Center)
+                    .TitleColorRes(Resource.Color.material_red_400)
+                    .ContentColorRes(Android.Resource.Color.White)
+                    .BackgroundColorRes(Resource.Color.material_blue_grey_800)
+                    .DividerColorRes(Resource.Color.accent)
+                    .BtnSelector(Resource.Drawable.md_btn_selector_custom, DialogAction.Positive)
+                    .PositiveColor(Color.White)
+                    .NegativeColorAttr(Android.Resource.Attribute.TextColorSecondaryInverse)
+                    .Theme(AFollestad.MaterialDialogs.Theme.Dark)
+                    .Show();
+        }
+
+        [OnClick(Resource.Id.showCancelDismiss)]
+        public void ShowShowCancelDismissCallbacks(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                    .Title(Resource.String.useGoogleLocationServices)
+                    .Content(Resource.String.useGoogleLocationServicesPrompt)
+                    .PositiveText(Resource.String.agree)
+                    .NegativeText(Resource.String.disagree)
+                    .NeutralText(Resource.String.more_info)
+                    .ShowListener(dialog => ShowToast("onShow"))
+                    .CancelListener(dialog => ShowToast("onCancel"))
+                    .DismissListener(dialog => ShowToast("onDismiss"))
+                    .Show();
+        }
+
+        [TargetApi(Value=(int)BuildVersionCodes.JellyBean)]
+        [OnClick(Resource.Id.file_chooser)]
+        public void ShowFileChooser(object sender, EventArgs e)
+        {
+            _chooserDialog = Resource.Id.file_chooser;
+            if (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.ReadExternalStorage)
+                != Android.Content.PM.Permission.Granted)
+            {
+                ActivityCompat.RequestPermissions(this, new string[] { Manifest.Permission.ReadExternalStorage }, StoragePermissionRC);
+                return;
+            }
+            new FileChooserDialog.Builder(this)
+                    .Show();
+        }
+
+        #region FileChooserDialog.IFileCallback implementation
+
+        public void OnFileSelection(FileChooserDialog dialog, File file)
+        {
+            ShowToast(file.AbsolutePath);
+        }
+
+        public void OnFileChooserDismissed(FileChooserDialog dialog)
+        {
+            ShowToast("File chooser dismissed!");
+        }
+
+        #endregion
+
+        [TargetApi(Value = (int)BuildVersionCodes.JellyBean)]
+        [OnClick(Resource.Id.folder_chooser)]
+        public void ShowFolderChooser(object sender, EventArgs e)
+        {
+            _chooserDialog = Resource.Id.folder_chooser;
+            if (ActivityCompat.CheckSelfPermission(this, Manifest.Permission.WriteExternalStorage)
+                != Android.Content.PM.Permission.Granted)
+            {
+                ActivityCompat.RequestPermissions(this, new string[] { Manifest.Permission.WriteExternalStorage }, StoragePermissionRC);
+                return;
+            }
+            new FolderChooserDialog.Builder(this)
+                    .ChooseButton(Resource.String.md_choose_label)
+                    .AllowNewFolder(true, 0)
+                    .Show();
+        }
+
+        #region FolderChooserDialog.IFolderCallback implementation
+
+        public void OnFolderSelection(FolderChooserDialog dialog, File folder)
+        {
+            ShowToast(folder.AbsolutePath);
+        }
+
+        public void OnFolderChooserDismissed(FolderChooserDialog dialog)
+        {
+            ShowToast("Folder chooser dismissed!");
+        }
+
+        #endregion
+
+        #endregion
     }
 }
-
