@@ -6,6 +6,7 @@ using AFollestad.MaterialDialogs.SimpleList;
 using AFollestad.MaterialDialogs.Util;
 using Android.App;
 using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Support.V4.Content;
 using Android.Support.V7.App;
@@ -22,10 +23,10 @@ using System.Threading;
 namespace MaterialDialogs.Sample
 {
     [Activity(Label = "@string/app_name", MainLauncher = true)]
-    public class MainActivity : AppCompatActivity //,
+    public class MainActivity : AppCompatActivity,
         //FolderChooserDialog.IFolderCallback,
         //FileChooserDialog.IFileCallback,
-        //ColorChooserDialog.IColorCallback
+        ColorChooserDialog.IColorCallback
     {
         const int StoragePermissionRC = 69;
 
@@ -528,6 +529,120 @@ namespace MaterialDialogs.Sample
                     .NegativeText(Android.Resource.String.Cancel)
                     .Show();
         }
+
+        #endregion
+
+        #region Color Choosers
+
+        [OnClick(Resource.Id.colorChooser_primary)]
+        public void ShowColorChooserPrimary(object sender, EventArgs e)
+        {
+            new ColorChooserDialog.Builder(this, Resource.String.color_palette)
+                    .TitleSub(Resource.String.colors)
+                    .Preselect(primaryPreselect)
+                    .Show();
+        }
+
+        [OnClick(Resource.Id.colorChooser_accent)]
+        public void ShowColorChooserAccent(object sender, EventArgs e)
+        {
+            new ColorChooserDialog.Builder(this, Resource.String.color_palette)
+                    .TitleSub(Resource.String.colors)
+                    .AccentMode(true)
+                    .Preselect(accentPreselect)
+                    .Show();
+        }
+
+        [OnClick(Resource.Id.colorChooser_customColors)]
+        public void ShowColorChooserCustomColors(object sender, EventArgs e)
+        {
+            int[][] subColors = new int[][]
+            {
+                new int[] 
+                {
+                    Color.ParseColor("#EF5350").ToArgb(),
+                    Color.ParseColor("#F44336").ToArgb(),
+                    Color.ParseColor("#E53935").ToArgb()
+                },
+                new int[]
+                {
+                    Color.ParseColor("#EC407A").ToArgb(),
+                    Color.ParseColor("#E91E63").ToArgb(),
+                    Color.ParseColor("#D81B60").ToArgb()
+                },
+                new int[]
+                {
+                    Color.ParseColor("#AB47BC").ToArgb(),
+                    Color.ParseColor("#9C27B0").ToArgb(),
+                    Color.ParseColor("#8E24AA").ToArgb()
+                },
+                new int[]
+                {
+                    Color.ParseColor("#7E57C2").ToArgb(),
+                    Color.ParseColor("#673AB7").ToArgb(),
+                    Color.ParseColor("#5E35B1").ToArgb()
+                },
+                new int[]
+                {
+                    Color.ParseColor("#5C6BC0").ToArgb(),
+                    Color.ParseColor("#3F51B5").ToArgb(),
+                    Color.ParseColor("#3949AB").ToArgb()
+                },
+                new int[]
+                {
+                    Color.ParseColor("#42A5F5").ToArgb(),
+                    Color.ParseColor("#2196F3").ToArgb(),
+                    Color.ParseColor("#1E88E5").ToArgb()
+                }
+            };
+
+            new ColorChooserDialog.Builder(this, Resource.String.color_palette)
+                    .TitleSub(Resource.String.colors)
+                    .Preselect(primaryPreselect)
+                    .CustomColors(Resource.Array.custom_colors, subColors)
+                    .Show();
+        }
+
+        [OnClick(Resource.Id.colorChooser_customColorsNoSub)]
+        public void ShowColorChooserCustomColorsNoSub(object sender, EventArgs e)
+        {
+            new ColorChooserDialog.Builder(this, Resource.String.color_palette)
+                    .TitleSub(Resource.String.colors)
+                    .Preselect(primaryPreselect)
+                    .CustomColors(Resource.Array.custom_colors, null)
+                    .Show();
+        }
+
+        #region ColorChooserDialog.IColorCallback implementation
+
+        public void OnColorSelection(ColorChooserDialog dialog, int color)
+        {
+            if (dialog.IsAccentMode)
+            {
+                accentPreselect = color;
+                ThemeSingleton.Get().PositiveColor = DialogUtils.GetActionTextStateList(this, color);
+                ThemeSingleton.Get().NeutralColor = DialogUtils.GetActionTextStateList(this, color);
+                ThemeSingleton.Get().NegativeColor = DialogUtils.GetActionTextStateList(this, color);
+                ThemeSingleton.Get().WidgetColor = color;
+            }
+            else
+            {
+                primaryPreselect = color;
+                SupportActionBar?.SetBackgroundDrawable(new ColorDrawable(new Color(color)));
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+                {
+                    Window.SetStatusBarColor(new Color(CircleView.ShiftColorDown(color)));
+                    Window.SetNavigationBarColor(new Color(color));
+                }
+            }
+        }
+
+        public void OnColorChooserDismissed(ColorChooserDialog dialog)
+        {
+            ShowToast("Color chooser dismissed!");
+        }
+
+        #endregion
 
         #endregion
     }

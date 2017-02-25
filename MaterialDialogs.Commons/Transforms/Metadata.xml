@@ -18,7 +18,6 @@
   <attr path="/api/package[@name='com.afollestad.materialdialogs.folderselector']"
     name="managedName">AFollestad.MaterialDialogs.FolderSelector</attr>
   
-<!--  <remove-node path="/api/package[@name='com.afollestad.materialdialogs.simplelist']/class[@name='MaterialSimpleListAdapter']/method[@name='onBindViewHolder' and count(parameter)=2 and parameter[1][@type='com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter.SimpleListVH'] and parameter[2][@type='int']]" />
-  <remove-node path="/api/package[@name='com.afollestad.materialdialogs.simplelist']/class[@name='MaterialSimpleListAdapter']/method[@name='onCreateViewHolder' and count(parameter)=2 and parameter[1][@type='android.view.ViewGroup'] and parameter[2][@type='int']]" />
-  -->
+  <attr path="//parameter[@type='ActivityType']"
+        name="type">Android.Support.V7.App.AppCompatActivity</attr>
 </metadata>
