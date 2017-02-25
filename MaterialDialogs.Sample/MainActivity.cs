@@ -7,9 +7,12 @@ using AFollestad.MaterialDialogs.Util;
 using Android;
 using Android.Annotation;
 using Android.App;
+using Android.Content;
+using Android.Content.PM;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
+using Android.Runtime;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Android.Support.V7.App;
@@ -18,11 +21,11 @@ using Android.Text.Method;
 using Android.Views;
 using Android.Widget;
 using CheeseBind;
+using Java.IO;
 using System;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Java.IO;
 using System.Threading.Tasks;
 
 namespace MaterialDialogs.Sample
@@ -69,7 +72,7 @@ namespace MaterialDialogs.Sample
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            SetContentView (Resource.Layout.activity_main);
+            SetContentView(Resource.Layout.activity_main);
             Cheeseknife.Bind(this);
 
             _handler = new Handler();
@@ -235,7 +238,7 @@ namespace MaterialDialogs.Sample
                 .ItemsCallback((dialog, view, which, text) => ShowToast($"{which}: {text}"))
                 .Show();
         }
-        
+
         [OnClick(Resource.Id.list_checkPrompt)]
         public void ShowListCheckPrompt(object sender, EventArgs e)
         {
@@ -249,7 +252,7 @@ namespace MaterialDialogs.Sample
         }
 
         static int index = 0;
-        
+
         [OnClick(Resource.Id.list_longPress)]
         public void ShowListLongPress(object sender, EventArgs e)
         {
@@ -259,7 +262,7 @@ namespace MaterialDialogs.Sample
                 .Items(Resource.Array.socialNetworks)
                 .ItemsCallback((dialog, view, which, text) => ShowToast($"{which}: {text}"))
                 .AutoDismiss(false)
-                .ItemsLongCallback((dialog, itemView, position, text) => 
+                .ItemsLongCallback((dialog, itemView, position, text) =>
                 {
                     dialog.GetItems().RemoveAt(position);
                     dialog.NotifyItemsChanged();
@@ -502,7 +505,7 @@ namespace MaterialDialogs.Sample
             };
 
             int widgetColor = ThemeSingleton.Get().WidgetColor;
-            MDTintHelper.SetTint(checkbox, 
+            MDTintHelper.SetTint(checkbox,
                 widgetColor == 0 ? ContextCompat.GetColor(this, Resource.Color.accent) : widgetColor);
 
             MDTintHelper.SetTint(_passwordInput,
@@ -561,7 +564,7 @@ namespace MaterialDialogs.Sample
         {
             int[][] subColors = new int[][]
             {
-                new int[] 
+                new int[]
                 {
                     Color.ParseColor("#EF5350").ToArgb(),
                     Color.ParseColor("#F44336").ToArgb(),
@@ -688,7 +691,7 @@ namespace MaterialDialogs.Sample
                     .Show();
         }
 
-        [TargetApi(Value=(int)BuildVersionCodes.JellyBean)]
+        [TargetApi(Value = (int)BuildVersionCodes.JellyBean)]
         [OnClick(Resource.Id.file_chooser)]
         public void ShowFileChooser(object sender, EventArgs e)
         {
@@ -822,14 +825,14 @@ namespace MaterialDialogs.Sample
                     .Content(Resource.String.please_wait)
                     .ContentGravity(GravityEnum.Center)
                     .Progress(false, 150, true)
-                    .CancelListener(dialog => 
+                    .CancelListener(dialog =>
                     {
                         _cancellationTokenSrc?.Cancel();
                     })
-                    .ShowListener(dialogInterface => 
+                    .ShowListener(dialogInterface =>
                     {
                         MaterialDialog dialog = (MaterialDialog)dialogInterface;
-                        StartThread(async () => 
+                        StartThread(async () =>
                         {
                             while (dialog.CurrentProgress != dialog.MaxProgress)
                             {
@@ -842,7 +845,7 @@ namespace MaterialDialogs.Sample
 
                                 dialog.IncrementProgress(1);
                             }
-                            RunOnUiThread(() => 
+                            RunOnUiThread(() =>
                             {
                                 dialog.SetContent(GetString(Resource.String.md_done_label));
                             });
@@ -873,5 +876,56 @@ namespace MaterialDialogs.Sample
         }
 
         #endregion
+
+        #region Preferences
+
+        [OnClick(Resource.Id.preference_dialogs)]
+        public void ShowPreferenceDialogs(object sender, EventArgs e)
+        {
+            if (Build.VERSION.SdkInt > BuildVersionCodes.GingerbreadMr1)
+            {
+                StartActivity(new Intent(ApplicationContext, typeof(PreferenceActivity)));
+            }
+            else
+            {
+                StartActivity(new Intent(ApplicationContext, typeof(PreferenceActivityCompat)));
+            }
+        }
+
+        #endregion
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            MenuInflater.Inflate(Resource.Menu.main, menu);
+            return base.OnCreateOptionsMenu(menu);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (item.ItemId == Resource.Id.about)
+            {
+                AboutDialog.Show(this);
+                return true;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
+        {
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            if (requestCode == StoragePermissionRC)
+            {
+                if (grantResults[0] == Permission.Granted)
+                {
+                    _handler.PostDelayed(() => FindViewById(_chooserDialog).PerformClick(), 1000);
+                }
+                else
+                {
+                    Toast.MakeText(this, "The folder or file chooser will not work without " +
+                        "permission to read external storage.", ToastLength.Long).Show();
+                }
+            }
+        }
     }
 }
