@@ -750,5 +750,67 @@ namespace MaterialDialogs.Sample
         #endregion
 
         #endregion
+
+        #region Input
+
+        [OnClick(Resource.Id.input)]
+        public void ShowInputDialog(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                    .Title(Resource.String.input)
+                    .Content(Resource.String.input_content)
+                    .InputType(InputTypes.ClassText |
+                            InputTypes.TextVariationPersonName |
+                            InputTypes.TextFlagCapWords)
+                    .InputRange(2, 16)
+                    .PositiveText(Resource.String.submit)
+                    .Input(Resource.String.input_hint, Resource.String.input_hint, false, (dialog, input) =>
+                            ShowToast("Hello, " + input + "!")).Show();
+        }
+
+        [OnClick(Resource.Id.input_custominvalidation)]
+        public void ShowInputDialogCustomInvalidation(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                    .Title(Resource.String.input)
+                    .Content(Resource.String.input_content_custominvalidation)
+                    .InputType(InputTypes.ClassText |
+                            InputTypes.TextVariationPersonName |
+                            InputTypes.TextFlagCapWords)
+                    .PositiveText(Resource.String.submit)
+                    .AlwaysCallInputCallback()
+                    .Input(Resource.String.input_hint, 0, false, (dialog, input) =>
+                    {
+                        if (input.Equals("hello", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            dialog.SetContent("I told you not to type that!");
+                            dialog.GetActionButton(DialogAction.Positive).Enabled = false;
+                        }
+                        else
+                        {
+                            dialog.SetContent(Resource.String.input_content_custominvalidation);
+                            dialog.GetActionButton(DialogAction.Positive).Enabled = true;
+                        }
+                    }).Show();
+        }
+
+        [OnClick(Resource.Id.input_checkPrompt)]
+        public void ShowInputDialogCheckPrompt(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                    .Title(Resource.String.input)
+                    .Content(Resource.String.input_content)
+                    .InputType(InputTypes.ClassText |
+                            InputTypes.TextVariationPersonName |
+                            InputTypes.TextFlagCapWords)
+                    .InputRange(2, 16)
+                    .PositiveText(Resource.String.submit)
+                    .Input(Resource.String.input_hint, Resource.String.input_hint, false, (dialog, input) =>
+                            ShowToast("Hello, " + input + "!"))
+                    .CheckBoxPromptRes(Resource.String.example_prompt, true, null)
+                    .Show();
+        }
+
+        #endregion
     }
 }

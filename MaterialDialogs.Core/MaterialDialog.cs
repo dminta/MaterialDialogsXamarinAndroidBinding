@@ -4,6 +4,7 @@ using Android.Views;
 using Java.Lang;
 using System.Linq;
 using Android.Content;
+using Android.Text;
 
 namespace AFollestad.MaterialDialogs
 {
@@ -53,6 +54,21 @@ namespace AFollestad.MaterialDialogs
                 public void OnShow(IDialogInterface dialog)
                 {
                     _action?.Invoke(dialog);
+                }
+            }
+
+            class InputCallbackActionWrapper : Java.Lang.Object, IInputCallback
+            {
+                Action<MaterialDialog, string> _action;
+
+                public InputCallbackActionWrapper(Action<MaterialDialog, string> action)
+                {
+                    _action = action;
+                }
+
+                public void OnInput(MaterialDialog dialog, ICharSequence text)
+                {
+                    _action?.Invoke(dialog, text.ToString());
                 }
             }
 
@@ -187,6 +203,16 @@ namespace AFollestad.MaterialDialogs
             public Builder DismissListener(Action<IDialogInterface> action)
             {
                 return DismissListener(new DialogInterfaceOnDismissListenerActionWrapper(action));
+            }
+
+            public Builder Input(int hint, int prefill, bool allowEmptyInput, Action<MaterialDialog, string> action)
+            {
+                return Input(hint, prefill, allowEmptyInput, new InputCallbackActionWrapper(action));
+            }
+
+            public Builder InputType(InputTypes inputTypes)
+            {
+                return InputType((int)inputTypes);
             }
         }
 
