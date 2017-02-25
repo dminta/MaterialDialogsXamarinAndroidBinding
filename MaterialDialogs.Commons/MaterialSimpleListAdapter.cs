@@ -4,8 +4,28 @@ using System;
 
 namespace AFollestad.MaterialDialogs.SimpleList
 {
+    class CallbackActionWrapper : Java.Lang.Object, MaterialSimpleListAdapter.ICallback
+    {
+        Action<MaterialDialog, int, MaterialSimpleListItem> _action;
+
+        public CallbackActionWrapper(Action<MaterialDialog, int, MaterialSimpleListItem> action)
+        {
+            _action = action;
+        }
+
+        public void OnMaterialListItemSelected(MaterialDialog dialog, int index1, MaterialSimpleListItem item)
+        {
+            _action?.Invoke(dialog, index1, item);
+        }
+    }
+
     public partial class MaterialSimpleListAdapter : global::Android.Support.V7.Widget.RecyclerView.Adapter, global::AFollestad.MaterialDialogs.Internal.IMDAdapter
     {
+        public MaterialSimpleListAdapter(Action<MaterialDialog, int, MaterialSimpleListItem> action)
+            : this(new CallbackActionWrapper(action))
+        {
+        }
+
         static IntPtr id_onBindViewHolder_Lcom_afollestad_materialdialogs_simplelist_MaterialSimpleListAdapter_SimpleListVH_I;
         // Metadata.xml XPath method reference: path="/api/package[@name='com.afollestad.materialdialogs.simplelist']/class[@name='MaterialSimpleListAdapter']/method[@name='onBindViewHolder' and count(parameter)=2 and parameter[1][@type='com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter.SimpleListVH'] and parameter[2][@type='int']]"
         [Register("onBindViewHolder", "(Lcom/afollestad/materialdialogs/simplelist/MaterialSimpleListAdapter$SimpleListVH;I)V", "GetOnBindViewHolder_Lcom_afollestad_materialdialogs_simplelist_MaterialSimpleListAdapter_SimpleListVH_IHandler")]

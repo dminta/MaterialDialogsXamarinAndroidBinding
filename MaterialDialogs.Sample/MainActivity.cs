@@ -1,15 +1,21 @@
 ﻿using AFollestad.MaterialDialogs;
 using AFollestad.MaterialDialogs.Color;
 using AFollestad.MaterialDialogs.FolderSelector;
+using AFollestad.MaterialDialogs.Internal;
+using AFollestad.MaterialDialogs.SimpleList;
 using AFollestad.MaterialDialogs.Util;
 using Android.App;
+using Android.Graphics;
 using Android.OS;
+using Android.Support.V4.Content;
 using Android.Support.V7.App;
 using Android.Text;
+using Android.Text.Method;
 using Android.Views;
 using Android.Widget;
 using CheeseBind;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading;
 
@@ -416,6 +422,111 @@ namespace MaterialDialogs.Sample
                 .NeutralText(Resource.String.clear_selection)
                 .ItemsDisabledIndices(0, 1)
                 .Show();
+        }
+
+        #endregion
+
+        #region Advanced Lists
+
+        [OnClick(Resource.Id.simpleList)]
+        public void ShowSimpleList(object sender, EventArgs e)
+        {
+            MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter((dialog, index1, item) => ShowToast(item.Content));
+            adapter.Add(new MaterialSimpleListItem.Builder(this)
+                    .Content("username@gmail.com")
+                    .Icon(Resource.Drawable.ic_account_circle)
+                    .BackgroundColor(Color.White)
+                    .Build());
+            adapter.Add(new MaterialSimpleListItem.Builder(this)
+                    .Content("user02@gmail.com")
+                    .Icon(Resource.Drawable.ic_account_circle)
+                    .BackgroundColor(Color.White)
+                    .Build());
+            adapter.Add(new MaterialSimpleListItem.Builder(this)
+                    .Content(Resource.String.add_account)
+                    .Icon(Resource.Drawable.ic_content_add)
+                    .IconPaddingDp(8)
+                    .Build());
+
+            new MaterialDialog.Builder(this)
+                    .Title(Resource.String.set_backup)
+                    .Adapter(adapter, null)
+                    .Show();
+        }
+
+        [OnClick(Resource.Id.customListItems)]
+        public void ShowCustomList(object sender, EventArgs e)
+        {
+            ButtonItemAdapter adapter = new ButtonItemAdapter(this, Resource.Array.socialNetworks);
+            adapter.SetCallbacks(
+                    itemIndex => ShowToast("Item clicked: " + itemIndex),
+                    buttonIndex => ShowToast("Button clicked: " + buttonIndex));
+            new MaterialDialog.Builder(this)
+                    .Title(Resource.String.socialNetworks)
+                    .Adapter(adapter, null)
+                    .Show();
+        }
+
+        #endregion
+
+        #region Custom Views
+
+        [OnClick(Resource.Id.customView)]
+        public void ShowCustomView(object sender, EventArgs e)
+        {
+            MaterialDialog dialog = new MaterialDialog.Builder(this)
+                    .Title(Resource.String.googleWifi)
+                    .CustomView(Resource.Layout.dialog_customview, true)
+                    .PositiveText(Resource.String.connect)
+                    .NegativeText(Android.Resource.String.Cancel)
+                    .OnPositive((dialog1, which) => ShowToast("Password: " + passwordInput.Text)).Build();
+
+            positiveAction = dialog.GetActionButton(DialogAction.Positive);
+
+            passwordInput = dialog.CustomView.FindViewById<EditText>(Resource.Id.password);
+            passwordInput.TextChanged += (s, ev) =>
+            {
+                positiveAction.Enabled = String.Concat(ev.Text.Select(c => c.ToString())).Trim().Length > 0;
+            };
+
+
+            CheckBox checkbox = dialog.CustomView.FindViewById<CheckBox>(Resource.Id.showPassword);
+            checkbox.CheckedChange += (s, ev) =>
+            {
+                passwordInput.InputType = (!ev.IsChecked) ? InputTypes.TextVariationPassword : InputTypes.ClassText;
+                passwordInput.TransformationMethod = (!ev.IsChecked) ? PasswordTransformationMethod.Instance : null;
+            };
+
+            int widgetColor = ThemeSingleton.Get().WidgetColor;
+            MDTintHelper.SetTint(checkbox, 
+                widgetColor == 0 ? ContextCompat.GetColor(this, Resource.Color.accent) : widgetColor);
+
+            MDTintHelper.SetTint(passwordInput,
+                widgetColor == 0 ? ContextCompat.GetColor(this, Resource.Color.accent) : widgetColor);
+
+            dialog.Show();
+            positiveAction.Enabled = false;
+        }
+
+        [OnClick(Resource.Id.customView_webView)]
+        public void ShowCustomWebView(object sender, EventArgs e)
+        {
+            int accentColor = ThemeSingleton.Get().WidgetColor;
+            if (accentColor == 0)
+                accentColor = ContextCompat.GetColor(this, Resource.Color.accent);
+            ChangelogDialog.Create(false, accentColor)
+                    .Show(SupportFragmentManager, "changelog");
+        }
+
+        [OnClick(Resource.Id.customView_datePicker)]
+        public void ShowCustomDatePicker(object sender, EventArgs e)
+        {
+            new MaterialDialog.Builder(this)
+                    .Title(Resource.String.date_picker)
+                    .CustomView(Resource.Layout.dialog_datepicker, false)
+                    .PositiveText(Android.Resource.String.Ok)
+                    .NegativeText(Android.Resource.String.Cancel)
+                    .Show();
         }
 
         #endregion
