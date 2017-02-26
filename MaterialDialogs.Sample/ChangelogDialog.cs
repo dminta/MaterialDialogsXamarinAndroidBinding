@@ -10,7 +10,7 @@ using System.IO;
 
 using DialogFragment = Android.Support.V4.App.DialogFragment;
 
-namespace MaterialDialogs.Sample
+namespace AFollestad.MaterialDialogs.Sample
 {
     class ChangelogDialog : DialogFragment
     {
@@ -79,12 +79,12 @@ namespace MaterialDialogs.Sample
             return Integer.ToHexString(color).Substring(2);
         }
 
-        private int ShiftColor(int color, bool up)
+        int ShiftColor(int color, bool up)
         {
             float[] hsv = new float[3];
-            Color.ColorToHSV(new Color(color), hsv);
+            Android.Graphics.Color.ColorToHSV(new Android.Graphics.Color(color), hsv);
             hsv[2] *= (up ? 1.1f : 0.9f);
-            return Color.HSVToColor(hsv);
+            return Android.Graphics.Color.HSVToColor(hsv);
         }
     }
 }

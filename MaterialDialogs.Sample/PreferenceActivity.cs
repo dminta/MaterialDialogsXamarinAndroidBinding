@@ -4,7 +4,7 @@ using Android.Preferences;
 using Android.Support.V7.App;
 using Android.Views;
 
-namespace MaterialDialogs.Sample
+namespace AFollestad.MaterialDialogs.Sample
 {
     [Activity(Label="@string/preference_dialogs")]
     public class PreferenceActivity : AppCompatActivity

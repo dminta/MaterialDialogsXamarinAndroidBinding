@@ -3,7 +3,7 @@ using Android.App;
 using Android.OS;
 using Android.Views;
 
-namespace MaterialDialogs.Sample
+namespace AFollestad.MaterialDialogs.Sample
 {
     [TargetApi(Value=(int)BuildVersionCodes.GingerbreadMr1)]
     [Activity(Label = "@string/preference_dialogs")]

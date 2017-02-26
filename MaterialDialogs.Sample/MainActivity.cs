@@ -28,7 +28,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MaterialDialogs.Sample
+namespace AFollestad.MaterialDialogs.Sample
 {
     [Activity(Label = "@string/app_name", MainLauncher = true)]
     public class MainActivity : AppCompatActivity,
@@ -442,12 +442,12 @@ namespace MaterialDialogs.Sample
             adapter.Add(new MaterialSimpleListItem.Builder(this)
                     .Content("username@gmail.com")
                     .Icon(Resource.Drawable.ic_account_circle)
-                    .BackgroundColor(Color.White)
+                    .BackgroundColor(Android.Graphics.Color.White)
                     .Build());
             adapter.Add(new MaterialSimpleListItem.Builder(this)
                     .Content("user02@gmail.com")
                     .Icon(Resource.Drawable.ic_account_circle)
-                    .BackgroundColor(Color.White)
+                    .BackgroundColor(Android.Graphics.Color.White)
                     .Build());
             adapter.Add(new MaterialSimpleListItem.Builder(this)
                     .Content(Resource.String.add_account)
@@ -566,39 +566,39 @@ namespace MaterialDialogs.Sample
             {
                 new int[]
                 {
-                    Color.ParseColor("#EF5350").ToArgb(),
-                    Color.ParseColor("#F44336").ToArgb(),
-                    Color.ParseColor("#E53935").ToArgb()
+                    Android.Graphics.Color.ParseColor("#EF5350").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#F44336").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#E53935").ToArgb()
                 },
                 new int[]
                 {
-                    Color.ParseColor("#EC407A").ToArgb(),
-                    Color.ParseColor("#E91E63").ToArgb(),
-                    Color.ParseColor("#D81B60").ToArgb()
+                    Android.Graphics.Color.ParseColor("#EC407A").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#E91E63").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#D81B60").ToArgb()
                 },
                 new int[]
                 {
-                    Color.ParseColor("#AB47BC").ToArgb(),
-                    Color.ParseColor("#9C27B0").ToArgb(),
-                    Color.ParseColor("#8E24AA").ToArgb()
+                    Android.Graphics.Color.ParseColor("#AB47BC").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#9C27B0").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#8E24AA").ToArgb()
                 },
                 new int[]
                 {
-                    Color.ParseColor("#7E57C2").ToArgb(),
-                    Color.ParseColor("#673AB7").ToArgb(),
-                    Color.ParseColor("#5E35B1").ToArgb()
+                    Android.Graphics.Color.ParseColor("#7E57C2").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#673AB7").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#5E35B1").ToArgb()
                 },
                 new int[]
                 {
-                    Color.ParseColor("#5C6BC0").ToArgb(),
-                    Color.ParseColor("#3F51B5").ToArgb(),
-                    Color.ParseColor("#3949AB").ToArgb()
+                    Android.Graphics.Color.ParseColor("#5C6BC0").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#3F51B5").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#3949AB").ToArgb()
                 },
                 new int[]
                 {
-                    Color.ParseColor("#42A5F5").ToArgb(),
-                    Color.ParseColor("#2196F3").ToArgb(),
-                    Color.ParseColor("#1E88E5").ToArgb()
+                    Android.Graphics.Color.ParseColor("#42A5F5").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#2196F3").ToArgb(),
+                    Android.Graphics.Color.ParseColor("#1E88E5").ToArgb()
                 }
             };
 
@@ -634,11 +634,11 @@ namespace MaterialDialogs.Sample
             else
             {
                 _primaryPreselect = color;
-                SupportActionBar?.SetBackgroundDrawable(new ColorDrawable(new Color(color)));
+                SupportActionBar?.SetBackgroundDrawable(new ColorDrawable(new Android.Graphics.Color(color)));
                 if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
                 {
-                    Window.SetStatusBarColor(new Color(CircleView.ShiftColorDown(color)));
-                    Window.SetNavigationBarColor(new Color(color));
+                    Window.SetStatusBarColor(new Android.Graphics.Color(CircleView.ShiftColorDown(color)));
+                    Window.SetNavigationBarColor(new Android.Graphics.Color(color));
                 }
             }
         }
@@ -670,7 +670,7 @@ namespace MaterialDialogs.Sample
                     .BackgroundColorRes(Resource.Color.material_blue_grey_800)
                     .DividerColorRes(Resource.Color.accent)
                     .BtnSelector(Resource.Drawable.md_btn_selector_custom, DialogAction.Positive)
-                    .PositiveColor(Color.White)
+                    .PositiveColor(Android.Graphics.Color.White)
                     .NegativeColorAttr(Android.Resource.Attribute.TextColorSecondaryInverse)
                     .Theme(AFollestad.MaterialDialogs.Theme.Dark)
                     .Show();

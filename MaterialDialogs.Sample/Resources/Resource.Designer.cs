@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("MaterialDialogs.Sample.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("AFollestad.MaterialDialogs.Sample.Resource", IsApplication=true)]
 
-namespace MaterialDialogs.Sample
+namespace AFollestad.MaterialDialogs.Sample
 {
 	
 	

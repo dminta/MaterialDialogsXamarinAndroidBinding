@@ -5,7 +5,7 @@ using Android.Support.V7.App;
 
 using DialogFragment = Android.Support.V4.App.DialogFragment;
 
-namespace MaterialDialogs.Sample
+namespace AFollestad.MaterialDialogs.Sample
 {
     public class AboutDialog : DialogFragment
     {
