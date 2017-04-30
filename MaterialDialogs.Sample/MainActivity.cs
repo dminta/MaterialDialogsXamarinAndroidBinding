@@ -37,6 +37,8 @@ namespace AFollestad.MaterialDialogs.Sample
         ColorChooserDialog.IColorCallback
     {
         const int StoragePermissionRC = 69;
+        
+        static int index = 0;
 
         EditText _passwordInput;
         View _positiveAction;
@@ -47,7 +49,6 @@ namespace AFollestad.MaterialDialogs.Sample
         Task _task;
         CancellationTokenSource _cancellationTokenSrc;
         Handler _handler;
-
         int _chooserDialog;
 
         void ShowToast(string message)
@@ -250,8 +251,6 @@ namespace AFollestad.MaterialDialogs.Sample
                 .NegativeText(Android.Resource.String.Cancel)
                 .Show();
         }
-
-        static int index = 0;
 
         [OnClick(Resource.Id.list_longPress)]
         public void ShowListLongPress(object sender, EventArgs e)
@@ -496,7 +495,6 @@ namespace AFollestad.MaterialDialogs.Sample
                 _positiveAction.Enabled = String.Concat(ev.Text.Select(c => c.ToString())).Trim().Length > 0;
             };
 
-
             CheckBox checkbox = dialog.CustomView.FindViewById<CheckBox>(Resource.Id.showPassword);
             checkbox.CheckedChange += (s, ev) =>
             {
@@ -520,7 +518,9 @@ namespace AFollestad.MaterialDialogs.Sample
         {
             int accentColor = ThemeSingleton.Get().WidgetColor;
             if (accentColor == 0)
+            {
                 accentColor = ContextCompat.GetColor(this, Resource.Color.accent);
+            }
             ChangelogDialog.Create(false, accentColor)
                     .Show(SupportFragmentManager, "changelog");
         }

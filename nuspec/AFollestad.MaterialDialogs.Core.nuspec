@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>AFollestad.MaterialDialogs.Core</id>
-    <version>0.9.3.0</version>
+    <version>0.9.4.4</version>
     <authors>Dominik Minta</authors>
     <owners>Dominik Minta</owners>
     <licenseUrl>https://github.com/dminta/MaterialDialogsXamarinAndroidBinding/blob/master/LICENSE</licenseUrl>
@@ -10,16 +10,16 @@
     <iconUrl>https://raw.githubusercontent.com/dminta/MaterialDialogsXamarinAndroidBinding/master/art/ic_web.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Material Dialogs library binding for Xamarin Android (https://github.com/afollestad/material-dialogs), Core module</description>
-    <releaseNotes>Initial release</releaseNotes>
+    <releaseNotes>AAR updated to v0.9.4.4</releaseNotes>
     <tags>xamarin android xamarin.android monodroid material</tags>
     <dependencies>
-      <dependency id="Xamarin.Android.Support.v7.AppCompat" version="25.1.1" />
-      <dependency id="Xamarin.Android.Support.v7.RecyclerView" version="25.1.1" />
-      <dependency id="Xamarin.Android.Support.v13" version="25.1.1" />
-      <dependency id="ZhangHai.Android.MaterialProgressBar" version="1.3.0.2" />
+      <dependency id="Xamarin.Android.Support.v7.AppCompat" version="25.3.1" />
+      <dependency id="Xamarin.Android.Support.v7.RecyclerView" version="25.3.1" />
+      <dependency id="Xamarin.Android.Support.v13" version="25.3.1" />
+      <dependency id="ZhangHai.Android.MaterialProgressBar" version="1.4.1" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\MaterialDialogs.Core\bin\Release\AFollestad.MaterialDialogs.Core.dll" target="lib\MonoAndroid70\AFollestad.MaterialDialogs.Core.dll" />
+    <file src="..\MaterialDialogs.Core\bin\Release\AFollestad.MaterialDialogs.Core.dll" target="lib\MonoAndroid71\AFollestad.MaterialDialogs.Core.dll" />
   </files>
 </package>
