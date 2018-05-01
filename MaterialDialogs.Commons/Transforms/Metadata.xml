@@ -17,7 +17,4 @@
     name="managedName">AFollestad.MaterialDialogs.SimpleList</attr>
   <attr path="/api/package[@name='com.afollestad.materialdialogs.folderselector']"
     name="managedName">AFollestad.MaterialDialogs.FolderSelector</attr>
-  
-  <attr path="//parameter[@type='ActivityType']"
-        name="type">Android.Support.V7.App.AppCompatActivity</attr>
 </metadata>

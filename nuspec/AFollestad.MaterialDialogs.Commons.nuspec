@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>AFollestad.MaterialDialogs.Commons</id>
-    <version>0.9.4.4</version>
+    <version>0.9.6.0</version>
     <authors>Dominik Minta</authors>
     <owners>Dominik Minta</owners>
     <licenseUrl>https://github.com/dminta/MaterialDialogsXamarinAndroidBinding/blob/master/LICENSE</licenseUrl>
@@ -10,16 +10,15 @@
     <iconUrl>https://raw.githubusercontent.com/dminta/MaterialDialogsXamarinAndroidBinding/master/art/ic_web.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Material Dialogs library binding for Xamarin Android (https://github.com/afollestad/material-dialogs), Commons module</description>
-    <releaseNotes>AAR updated to v0.9.4.4</releaseNotes>
+    <releaseNotes>AAR updated to v0.9.6.0</releaseNotes>
     <tags>xamarin android xamarin.android monodroid material</tags>
     <dependencies>
-      <dependency id="Xamarin.Android.Support.v7.AppCompat" version="25.3.1" />
-      <dependency id="Xamarin.Android.Support.v7.RecyclerView" version="25.3.1" />
-      <dependency id="Xamarin.Android.Support.v13" version="25.3.1" />
-      <dependency id="AFollestad.MaterialDialogs.Core" version="0.9.4.4" />
+      <dependency id="Xamarin.Android.Support.v7.AppCompat" version="27.0.2" />
+      <dependency id="Xamarin.Android.Support.v7.RecyclerView" version="27.0.2" />
+      <dependency id="AFollestad.MaterialDialogs.Core" version="0.9.6.0" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\MaterialDialogs.Commons\bin\Release\AFollestad.MaterialDialogs.Commons.dll" target="lib\MonoAndroid71\AFollestad.MaterialDialogs.Commons.dll" />
+    <file src="..\MaterialDialogs.Commons\bin\Release\AFollestad.MaterialDialogs.Commons.dll" target="lib\MonoAndroid81\AFollestad.MaterialDialogs.Commons.dll" />
   </files>
 </package>

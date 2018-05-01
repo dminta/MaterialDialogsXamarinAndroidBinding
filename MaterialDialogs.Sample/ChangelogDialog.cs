@@ -32,7 +32,7 @@ namespace AFollestad.MaterialDialogs.Sample
             {
                 customView = LayoutInflater.From(Activity).Inflate(Resource.Layout.dialog_webview, null);
             }
-            catch (InflateException e)
+            catch (InflateException)
             {
                 throw new IllegalStateException("This device does not support Web Views.");
             }

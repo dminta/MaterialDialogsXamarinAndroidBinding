@@ -1,5 +1,4 @@
-﻿using AFollestad.MaterialDialogs;
-using AFollestad.MaterialDialogs.Color;
+﻿using AFollestad.MaterialDialogs.Color;
 using AFollestad.MaterialDialogs.FolderSelector;
 using AFollestad.MaterialDialogs.Internal;
 using AFollestad.MaterialDialogs.SimpleList;
@@ -9,7 +8,6 @@ using Android.Annotation;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Runtime;
@@ -110,7 +108,7 @@ namespace AFollestad.MaterialDialogs.Sample
         {
             new MaterialDialog.Builder(this)
                 .Title(Resource.String.useGoogleLocationServices)
-                .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
+                .Content(Resource.String.useGoogleLocationServicesPrompt, true)
                 .PositiveText(Resource.String.agree)
                 .NegativeText(Resource.String.disagree)
                 .Show();
@@ -124,6 +122,7 @@ namespace AFollestad.MaterialDialogs.Sample
                 .Content(Resource.String.loremIpsum)
                 .PositiveText(Resource.String.agree)
                 .NegativeText(Resource.String.disagree)
+                .CheckBoxPrompt("Hello, world!", true, null)
                 .Show();
         }
 
@@ -134,7 +133,7 @@ namespace AFollestad.MaterialDialogs.Sample
                 .IconRes(Resource.Mipmap.ic_launcher)
                 .LimitIconToDefaultSize()
                 .Title(Resource.String.useGoogleLocationServices)
-                .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
+                .Content(Resource.String.useGoogleLocationServicesPrompt, true)
                 .PositiveText(Resource.String.agree)
                 .NegativeText(Resource.String.disagree)
                 .Show();
@@ -163,7 +162,7 @@ namespace AFollestad.MaterialDialogs.Sample
         {
             new MaterialDialog.Builder(this)
                 .Title(Resource.String.useGoogleLocationServices)
-                .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
+                .Content(Resource.String.useGoogleLocationServicesPrompt, true)
                 .PositiveText(Resource.String.speedBoost)
                 .NegativeText(Resource.String.noThanks)
                 .BtnStackedGravity(GravityEnum.End)
@@ -176,7 +175,7 @@ namespace AFollestad.MaterialDialogs.Sample
         {
             new MaterialDialog.Builder(this)
                 .Title(Resource.String.useGoogleLocationServices)
-                .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
+                .Content(Resource.String.useGoogleLocationServicesPrompt, true)
                 .PositiveText(Resource.String.agree)
                 .NegativeText(Resource.String.disagree)
                 .NeutralText(Resource.String.more_info)
@@ -188,7 +187,7 @@ namespace AFollestad.MaterialDialogs.Sample
         {
             new MaterialDialog.Builder(this)
                 .Title(Resource.String.useGoogleLocationServices)
-                .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
+                .Content(Resource.String.useGoogleLocationServicesPrompt, true)
                 .PositiveText(Resource.String.agree)
                 .NegativeText(Resource.String.disagree)
                 .NeutralText(Resource.String.more_info)
@@ -287,6 +286,7 @@ namespace AFollestad.MaterialDialogs.Sample
             new MaterialDialog.Builder(this)
                 .Title(Resource.String.socialNetworks)
                 .Items(Resource.Array.socialNetworks)
+                .ItemsDisabledIndices(1, 3)
                 .ItemsCallbackSingleChoice(2, (dialog, view, which, text) =>
                 {
                     ShowToast($"{which}: {text}");
@@ -319,7 +319,7 @@ namespace AFollestad.MaterialDialogs.Sample
                 .Items(Resource.Array.socialNetworks)
                 .ItemsCallbackMultiChoice(new int[] { 1, 3 }, (dialog, which, text) =>
                 {
-                    StringBuilder str = new StringBuilder();
+                    var str = new StringBuilder();
                     for (int i = 0; i < which.Length; i++)
                     {
                         if (i > 0) str.Append('\n');
@@ -387,7 +387,7 @@ namespace AFollestad.MaterialDialogs.Sample
                 .Items(Resource.Array.socialNetworks_longItems)
                 .ItemsCallbackMultiChoice(new int[] { 1, 3 }, (dialog, which, text) =>
                 {
-                    StringBuilder str = new StringBuilder();
+                    var str = new StringBuilder();
                     for (int i = 0; i < which.Length; i++)
                     {
                         if (i > 0) str.Append('\n');
@@ -410,7 +410,7 @@ namespace AFollestad.MaterialDialogs.Sample
                 .Items(Resource.Array.socialNetworks)
                 .ItemsCallbackMultiChoice(new int[] { 0, 1, 2 }, (dialog, which, text) =>
                 {
-                    StringBuilder str = new StringBuilder();
+                    var str = new StringBuilder();
                     for (int i = 0; i < which.Length; i++)
                     {
                         if (i > 0) str.Append('\n');
@@ -485,7 +485,8 @@ namespace AFollestad.MaterialDialogs.Sample
                     .CustomView(Resource.Layout.dialog_customview, true)
                     .PositiveText(Resource.String.connect)
                     .NegativeText(Android.Resource.String.Cancel)
-                    .OnPositive((dialog1, which) => ShowToast("Password: " + _passwordInput.Text)).Build();
+                    .OnPositive((dialog1, which) => ShowToast("Password: " + _passwordInput.Text))
+                    .Build();
 
             _positiveAction = dialog.GetActionButton(DialogAction.Positive);
 
@@ -546,7 +547,7 @@ namespace AFollestad.MaterialDialogs.Sample
             new ColorChooserDialog.Builder(this, Resource.String.color_palette)
                     .TitleSub(Resource.String.colors)
                     .Preselect(_primaryPreselect)
-                    .Show();
+                    .Show(this);
         }
 
         [OnClick(Resource.Id.colorChooser_accent)]
@@ -556,7 +557,7 @@ namespace AFollestad.MaterialDialogs.Sample
                     .TitleSub(Resource.String.colors)
                     .AccentMode(true)
                     .Preselect(_accentPreselect)
-                    .Show();
+                    .Show(this);
         }
 
         [OnClick(Resource.Id.colorChooser_customColors)]
@@ -606,7 +607,7 @@ namespace AFollestad.MaterialDialogs.Sample
                     .TitleSub(Resource.String.colors)
                     .Preselect(_primaryPreselect)
                     .CustomColors(Resource.Array.custom_colors, subColors)
-                    .Show();
+                    .Show(this);
         }
 
         [OnClick(Resource.Id.colorChooser_customColorsNoSub)]
@@ -616,7 +617,7 @@ namespace AFollestad.MaterialDialogs.Sample
                     .TitleSub(Resource.String.colors)
                     .Preselect(_primaryPreselect)
                     .CustomColors(Resource.Array.custom_colors, null)
-                    .Show();
+                    .Show(this);
         }
 
         #region ColorChooserDialog.IColorCallback implementation
@@ -659,7 +660,7 @@ namespace AFollestad.MaterialDialogs.Sample
         {
             new MaterialDialog.Builder(this)
                     .Title(Resource.String.useGoogleLocationServices)
-                    .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
+                    .Content(Resource.String.useGoogleLocationServicesPrompt, true)
                     .PositiveText(Resource.String.agree)
                     .NegativeText(Resource.String.disagree)
                     .PositiveColorRes(Resource.Color.material_red_400)
@@ -681,7 +682,7 @@ namespace AFollestad.MaterialDialogs.Sample
         {
             new MaterialDialog.Builder(this)
                     .Title(Resource.String.useGoogleLocationServices)
-                    .Content(Html.FromHtml(GetString(Resource.String.useGoogleLocationServicesPrompt)))
+                    .Content(Resource.String.useGoogleLocationServicesPrompt, true)
                     .PositiveText(Resource.String.agree)
                     .NegativeText(Resource.String.disagree)
                     .NeutralText(Resource.String.more_info)
@@ -702,8 +703,7 @@ namespace AFollestad.MaterialDialogs.Sample
                 ActivityCompat.RequestPermissions(this, new string[] { Manifest.Permission.ReadExternalStorage }, StoragePermissionRC);
                 return;
             }
-            new FileChooserDialog.Builder(this)
-                    .Show();
+            new FileChooserDialog.Builder(this).Show(this);
         }
 
         #region FileChooserDialog.IFileCallback implementation
@@ -734,7 +734,7 @@ namespace AFollestad.MaterialDialogs.Sample
             new FolderChooserDialog.Builder(this)
                     .ChooseButton(Resource.String.md_choose_label)
                     .AllowNewFolder(true, 0)
-                    .Show();
+                    .Show(this);
         }
 
         #region FolderChooserDialog.IFolderCallback implementation
@@ -882,14 +882,7 @@ namespace AFollestad.MaterialDialogs.Sample
         [OnClick(Resource.Id.preference_dialogs)]
         public void ShowPreferenceDialogs(object sender, EventArgs e)
         {
-            if (Build.VERSION.SdkInt > BuildVersionCodes.GingerbreadMr1)
-            {
-                StartActivity(new Intent(ApplicationContext, typeof(PreferenceActivity)));
-            }
-            else
-            {
-                StartActivity(new Intent(ApplicationContext, typeof(PreferenceActivityCompat)));
-            }
+            StartActivity(new Intent(ApplicationContext, typeof(PreferenceActivity)));
         }
 
         #endregion
