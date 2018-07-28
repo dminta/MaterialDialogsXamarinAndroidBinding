@@ -1,11 +1,20 @@
-# Material Dialogs binding for Xamarin Android
+# Material Dialogs binding for Xamarin.Android
 
-Material Dialogs library v0.9.6.0 included
+[Material Dialogs - more information](https://github.com/afollestad/material-dialogs)
 
-Download packages from nuget.org:
+Bindings libraries contain Material Dialogs v0.9.6.0 prebuilt AARs.
+
+Download prebuilt nuget packages from nuget.org:
 * [Core](https://www.nuget.org/packages/AFollestad.MaterialDialogs.Core/)
 * [Commons](https://www.nuget.org/packages/AFollestad.MaterialDialogs.Commons/)
 
-Prerequisites:
-* Visual Studio 2017 with Xamarin.Android 8.2.0.16 or newer
-* Android SDK API 27
+## Building
+
+### Prerequisites
+
+- Visual Studio 2017 with Xamarin.Android 8.2.0.16 or higher,
+- Android SDK with API Level 27.
+
+## License
+
+The license for this repository is specified in [LICENSE](LICENSE).
